@@ -1,0 +1,36 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+  .dark {
+    color-scheme: dark;
+  }
+  html,
+  body {
+    height: 100%;
+  }
+  body {
+    @apply bg-zinc-50 text-zinc-900 antialiased;
+  }
+  .dark body {
+    @apply bg-zinc-950 text-zinc-50;
+  }
+}
+
+@layer components {
+  .app-shell {
+    @apply min-h-dvh;
+    background:
+      radial-gradient(1200px 600px at 15% 5%, rgba(99, 102, 241, 0.18), transparent 60%),
+      radial-gradient(900px 500px at 85% 0%, rgba(168, 85, 247, 0.14), transparent 55%);
+  }
+  .dark .app-shell {
+    background:
+      radial-gradient(1200px 600px at 15% 5%, rgba(99, 102, 241, 0.18), transparent 60%),
+      radial-gradient(900px 500px at 85% 0%, rgba(168, 85, 247, 0.12), transparent 55%);
+  }
+}
