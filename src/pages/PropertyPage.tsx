@@ -3,7 +3,6 @@ import { Link, useParams } from 'react-router-dom';
 import { api, type Offer, type PaymentMethod, type Property } from '../lib/api';
 import { formatDateTime, formatMoneyEur, formatPercent, negotiatedPercent } from '../lib/format';
 import { getSocket } from '../lib/socket';
-import { assetUrl } from '../lib/assets';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -86,8 +85,8 @@ export function PropertyPage() {
       </div>
 
       <Card className="p-0 overflow-hidden">
-        {property.image ? <img className="h-56 w-full object-cover" src={assetUrl(property.image)} alt="" /> : null}
         {property.description ? <div className="p-5 text-sm text-zinc-600 dark:text-zinc-300">{property.description}</div> : null}
+        {!property.description ? <div className="p-5 text-sm text-zinc-500">Fără descriere.</div> : null}
       </Card>
 
       <Card className="p-6">
@@ -153,7 +152,11 @@ export function PropertyPage() {
                 <div className="sm:col-span-3">
                   <StatusBadge status={o.status} />
                   <div className="mt-1 text-xs text-zinc-500">
-                    {o.paymentMethod === 'cash' ? 'Surse proprii' : o.paymentMethod === 'credit' ? 'Credit' : 'Ambele'}
+                    {(o.paymentMethod ?? 'cash') === 'cash'
+                      ? 'Surse proprii'
+                      : (o.paymentMethod ?? 'cash') === 'credit'
+                        ? 'Credit'
+                        : 'Ambele'}
                   </div>
                 </div>
               </div>

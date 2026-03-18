@@ -2,7 +2,6 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { api, type Property } from '../lib/api';
 import { formatMoneyEur } from '../lib/format';
-import { assetUrl } from '../lib/assets';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { Input } from '../components/ui/Input';
@@ -16,7 +15,6 @@ export function DashboardPage() {
   const [title, setTitle] = useState('');
   const [price, setPrice] = useState<string>('');
   const [description, setDescription] = useState('');
-  const [image, setImage] = useState<File | null>(null);
 
   const shareBase = useMemo(() => `${window.location.origin}/share/`, []);
 
@@ -49,14 +47,12 @@ export function DashboardPage() {
               const p = await api.createProperty({
                 title: title.trim(),
                 price: Number(price),
-                description,
-                image
+                description
               });
               toast.push({ title: 'Proprietate salvată', kind: 'success' });
               setTitle('');
               setPrice('');
               setDescription('');
-              setImage(null);
               await refresh();
               // preselect? skip
               void p;
@@ -77,15 +73,6 @@ export function DashboardPage() {
               onChange={(e) => setDescription(e.target.value)}
             />
           </label>
-          <label className="block sm:col-span-2">
-            <div className="mb-1.5 text-sm font-medium text-zinc-800 dark:text-zinc-200">Poză cover (jpg/png/webp)</div>
-            <input
-              type="file"
-              accept="image/png,image/jpeg,image/webp"
-              onChange={(e) => setImage(e.target.files?.[0] || null)}
-              className="block w-full text-sm text-zinc-600 file:mr-4 file:rounded-xl file:border-0 file:bg-zinc-900 file:px-4 file:py-2 file:text-sm file:font-medium file:text-white hover:file:bg-zinc-800 dark:text-zinc-300 dark:file:bg-white dark:file:text-zinc-950 dark:hover:file:bg-zinc-200"
-            />
-          </label>
           <div className="sm:col-span-2">
             <Button className="w-full sm:w-auto" disabled={loading}>
               {loading ? 'Se salvează…' : 'Salvează'}
@@ -97,13 +84,7 @@ export function DashboardPage() {
       <div className="grid gap-4 md:grid-cols-2">
         {items?.map((p) => (
           <Card key={p.id} className="p-0 overflow-hidden">
-            {p.image ? (
-              <div className="h-44 w-full bg-zinc-100 dark:bg-zinc-900">
-                <img src={assetUrl(p.image)} alt="" className="h-44 w-full object-cover" />
-              </div>
-            ) : (
-              <div className="h-44 w-full bg-gradient-to-br from-zinc-100 to-zinc-50 dark:from-zinc-900 dark:to-zinc-950" />
-            )}
+            <div className="h-44 w-full bg-gradient-to-br from-zinc-100 to-zinc-50 dark:from-zinc-900 dark:to-zinc-950" />
             <div className="p-5">
               <div className="flex items-start justify-between gap-3">
                 <div>

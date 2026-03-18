@@ -22,7 +22,6 @@ export type Property = {
   id: string;
   title: string;
   price: number;
-  image: string;
   description: string;
   shareToken: string;
   createdAt: string;
@@ -48,14 +47,11 @@ export const api = {
   me: () => request<{ user: User }>('/api/auth/me'),
 
   listProperties: () => request<{ properties: Property[] }>('/api/properties'),
-  createProperty: (data: { title: string; price: number; description: string; image?: File | null }) => {
-    const fd = new FormData();
-    fd.set('title', data.title);
-    fd.set('price', String(data.price));
-    fd.set('description', data.description);
-    if (data.image) fd.set('image', data.image);
-    return request<{ property: Property }>('/api/properties', { method: 'POST', body: fd });
-  },
+  createProperty: (data: { title: string; price: number; description: string }) =>
+    request<{ property: Property }>('/api/properties', {
+      method: 'POST',
+      body: JSON.stringify(data)
+    }),
   getProperty: (propertyId: string) => request<{ property: Property; offers: Offer[] }>(`/api/properties/${propertyId}`),
   addOffer: (propertyId: string, data: { name: string; price: number; paymentMethod: PaymentMethod }) =>
     request<{ offer: Offer }>(`/api/properties/${propertyId}/offers`, {

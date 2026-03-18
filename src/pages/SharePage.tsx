@@ -3,7 +3,6 @@ import { useParams } from 'react-router-dom';
 import { api, type Offer, type OfferStatus, type Property } from '../lib/api';
 import { formatDateTime, formatMoneyEur, formatPercent, negotiatedPercent } from '../lib/format';
 import { getSocket } from '../lib/socket';
-import { assetUrl } from '../lib/assets';
 import { Card } from '../components/ui/Card';
 import { Button } from '../components/ui/Button';
 import { StatusBadge } from '../components/ui/Badge';
@@ -81,7 +80,6 @@ export function SharePage() {
       <div className="mt-6 grid gap-6 lg:grid-cols-12">
         <div className="lg:col-span-5">
           <Card className="p-0 overflow-hidden">
-            {property.image ? <img className="h-56 w-full object-cover" src={assetUrl(property.image)} alt="" /> : null}
             {property.description ? (
               <div className="p-5 text-sm text-zinc-600 dark:text-zinc-300">{property.description}</div>
             ) : (
@@ -113,7 +111,11 @@ export function SharePage() {
                       <div className="text-sm font-semibold">{formatMoneyEur(o.price)}</div>
                       <div className={`mt-1 text-xs ${pctColor}`}>{pctText} vs listare</div>
                       <div className="mt-1 text-xs text-zinc-500">
-                        {o.paymentMethod === 'cash' ? 'Surse proprii' : o.paymentMethod === 'credit' ? 'Credit' : 'Ambele'}
+                        {(o.paymentMethod ?? 'cash') === 'cash'
+                          ? 'Surse proprii'
+                          : (o.paymentMethod ?? 'cash') === 'credit'
+                            ? 'Credit'
+                            : 'Ambele'}
                       </div>
                     </div>
                     <div className="sm:col-span-2">
